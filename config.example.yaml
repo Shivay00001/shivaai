@@ -1,0 +1,108 @@
+# ShivAI Configuration File
+# Copy this to config.yaml and customize
+
+# General Settings
+offline_mode: true              # Run in offline mode (no cloud services)
+debug: false                    # Enable debug logging
+log_level: INFO                 # DEBUG, INFO, WARNING, ERROR
+data_dir: data                  # Data directory for DB, logs, etc.
+
+# Speech Recognition
+speech:
+  engine: vosk                  # vosk (offline), google (online, requires internet)
+  vosk_model_path: models/vosk-model-small-en-us-0.15
+  hindi_model_path: models/vosk-model-small-hi-0.22
+  language: hi-IN               # hi-IN (Hindi), en-US (English), auto (detect)
+  google_fallback_enabled: false # Use Google Speech if Vosk fails (requires internet)
+  sample_rate: 16000
+  timeout: 5                    # Listening timeout in seconds
+  phrase_time_limit: 15         # Maximum phrase duration
+
+# Text-to-Speech
+tts:
+  engine: pyttsx3               # pyttsx3 (offline)
+  rate: 160                     # Speech rate (words per minute)
+  volume: 1.0                   # Volume (0.0 to 1.0)
+  voice: null                   # Voice ID (null for default)
+  fast_mode_rate: 200           # Speech rate in fast mode
+
+# Android Debug Bridge (ADB)
+adb:
+  enabled: false                # Enable Android device control
+  adb_path: adb                 # Path to ADB executable
+  auto_connect: true            # Auto-connect to device on startup
+  connection_timeout: 5         # Connection timeout in seconds
+
+# Workflow Engine
+workflow:
+  enabled: true
+  max_concurrent: 3             # Maximum concurrent workflows
+  state_persistence: true       # Save workflow state to disk
+  state_file: data/workflow_states.json
+
+# Plugin System
+plugin:
+  plugin_dirs:
+    - shivai/plugins            # Plugin directories to scan
+  auto_load: true               # Auto-load plugins on startup
+  enabled_plugins:              # List of enabled plugins (empty = all)
+    - vosk_speech_plugin
+    - adb_plugin
+    - app_builder_plugin
+    - organizer_plugin
+
+# Security & Privacy
+security:
+  auth_enabled: true            # Require authentication for API access
+  auth_token_file: data/auth_token.txt
+  encryption_enabled: false     # Encrypt sensitive data at rest
+  telemetry_enabled: false      # Send anonymous usage statistics
+  auto_update_check: false      # Check for updates on startup
+
+# Database
+database:
+  path: data/db/shivai.db
+  backup_enabled: true
+  backup_interval_hours: 24
+
+# Web API
+api:
+  host: 127.0.0.1               # API server host (127.0.0.1 for local only)
+  port: 8765                    # API server port
+  workers: 1                    # Number of worker processes
+  cors_enabled: true            # Enable CORS for web clients
+  cors_origins:
+    - http://localhost:*
+    - http://127.0.0.1:*
+
+# Feature Flags
+features:
+  app_builder: true
+  workflow_automation: true
+  pattern_learning: true
+  android_control: false        # Requires ADB setup
+  expert_tasks: true
+  marketplace: false            # Enable plugin marketplace
+
+# Performance
+performance:
+  task_queue_workers: 3
+  max_task_retries: 2
+  task_timeout_seconds: 30
+  cache_enabled: true
+  cache_ttl_seconds: 3600
+
+# Bilingual Support
+language:
+  primary: hi-IN                # Primary language
+  secondary: en-US              # Secondary language
+  hinglish_support: true        # Support mixed Hindi-English
+  auto_detect: true             # Auto-detect language in commands
+
+# User Preferences (customizable per user)
+user:
+  name: User                    # User display name
+  timezone: Asia/Kolkata
+  date_format: DD/MM/YYYY
+  time_format: 24h              # 12h or 24h
+  preferred_voice: default

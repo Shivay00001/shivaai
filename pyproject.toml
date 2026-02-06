@@ -1,0 +1,229 @@
+[build-system]
+requires = ["setuptools>=65.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "shivai"
+version = "1.0.0"
+description = "India's First Offline Autonomous General Intelligence Assistant"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "ShivAI Team", email = "team@shivai.in"}
+]
+keywords = ["ai", "assistant", "automation", "offline", "voice", "agi", "india"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: System :: Systems Administration",
+    "Topic :: Office/Business",
+]
+
+dependencies = [
+    "pyttsx3>=2.90",
+    "SpeechRecognition>=3.10.0",
+    "vosk>=0.3.45",
+    "pyautogui>=0.9.54",
+    "keyboard>=0.13.5",
+    "pyperclip>=1.8.2",
+    "psutil>=5.9.5",
+    "opencv-python>=4.8.0",
+    "Pillow>=10.0.0",
+    "numpy>=1.24.0",
+    "PyYAML>=6.0",
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
+    "pydantic>=2.4.0",
+    "python-multipart>=0.0.6",
+    "Jinja2>=3.1.2",
+    "aiofiles>=23.2.1",
+]
+
+[project.optional-dependencies]
+# Development dependencies
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pytest-asyncio>=0.21.0",
+    "black>=23.9.0",
+    "ruff>=0.0.292",
+    "mypy>=1.5.0",
+    "pre-commit>=3.4.0",
+]
+
+# Testing dependencies
+test = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-mock>=3.11.1",
+    "httpx>=0.25.0",
+]
+
+# Documentation dependencies
+docs = [
+    "mkdocs>=1.5.0",
+    "mkdocs-material>=9.4.0",
+    "mkdocstrings[python]>=0.23.0",
+]
+
+# Windows-specific dependencies
+windows = [
+    "pywin32>=306",
+    "winshell>=0.6",
+]
+
+# ADB/Android dependencies
+android = [
+    "pure-python-adb>=0.3.0",
+]
+
+# All optional dependencies
+all = [
+    "shivai[dev,test,docs,windows,android]",
+]
+
+[project.urls]
+Homepage = "https://github.com/shivai/shivai"
+Documentation = "https://docs.shivai.in"
+Repository = "https://github.com/shivai/shivai"
+"Bug Tracker" = "https://github.com/shivai/shivai/issues"
+
+[project.scripts]
+shivai = "shivai.__main__:main"
+
+[tool.setuptools]
+packages = ["shivai", "shivai.core_engine", "shivai.speech", "shivai.tts", 
+            "shivai.adb", "shivai.workflows", "shivai.app_builder", 
+            "shivai.automation", "shivai.knowledge", "shivai.plugins",
+            "shivai.web_api", "shivai.security", "shivai.utils"]
+
+[tool.setuptools.package-data]
+shivai = ["py.typed"]
+"shivai.app_builder" = ["templates/**/*"]
+"shivai.plugins" = ["**/manifest.json"]
+
+# Black configuration
+[tool.black]
+line-length = 100
+target-version = ["py310", "py311", "py312"]
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+  | models
+)/
+'''
+
+# Ruff configuration
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "C",   # flake8-comprehensions
+    "B",   # flake8-bugbear
+    "UP",  # pyupgrade
+]
+ignore = [
+    "E501",  # line too long (handled by black)
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]  # unused imports in __init__.py
+
+# MyPy configuration
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+strict_optional = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = [
+    "pyttsx3.*",
+    "speech_recognition.*",
+    "vosk.*",
+    "pyautogui.*",
+    "keyboard.*",
+    "pyperclip.*",
+    "cv2.*",
+    "winshell.*",
+]
+ignore_missing_imports = true
+
+# Pytest configuration
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--verbose",
+    "--strict-markers",
+    "--strict-config",
+    "--cov=shivai",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-report=xml",
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+    "requires_adb: marks tests that require ADB connection",
+    "requires_audio: marks tests that require audio devices",
+]
+
+# Coverage configuration
+[tool.coverage.run]
+source = ["shivai"]
+omit = [
+    "*/tests/*",
+    "*/test_*.py",
+    "*/__main__.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]

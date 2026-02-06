@@ -1,0 +1,6 @@
+# This directory contains ShivAI plugins
+# Plugins should be organized as:
+# plugins/plugin_name/
+#   ├── manifest.json
+#   ├── plugin.py
+#   └── __init__.py

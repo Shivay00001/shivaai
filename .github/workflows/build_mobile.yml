@@ -1,0 +1,107 @@
+name: Build Mobile App
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build-android:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+    
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.16.0'
+        channel: 'stable'
+    
+    - name: Install Flutter dependencies
+      working-directory: mobile
+      run: flutter pub get
+    
+    - name: Run Flutter tests
+      working-directory: mobile
+      run: flutter test
+      continue-on-error: true
+    
+    - name: Build APK
+      working-directory: mobile
+      run: flutter build apk --release
+    
+    - name: Upload APK artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: shivai-android-apk
+        path: mobile/build/app/outputs/flutter-apk/app-release.apk
+        retention-days: 7
+    
+    - name: Upload to Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: mobile/build/app/outputs/flutter-apk/app-release.apk
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    # Optional: Build App Bundle for Google Play
+    - name: Build App Bundle
+      working-directory: mobile
+      run: flutter build appbundle --release
+      if: startsWith(github.ref, 'refs/tags/')
+    
+    - name: Upload App Bundle
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: actions/upload-artifact@v3
+      with:
+        name: shivai-android-bundle
+        path: mobile/build/app/outputs/bundle/release/app-release.aab
+        retention-days: 30
+
+  build-web:
+    name: Build Web App
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.16.0'
+        channel: 'stable'
+    
+    - name: Install Flutter dependencies
+      working-directory: mobile
+      run: flutter pub get
+    
+    - name: Build Web app
+      working-directory: mobile
+      run: flutter build web --release
+    
+    - name: Upload Web build
+      uses: actions/upload-artifact@v3
+      with:
+        name: shivai-web-flutter
+        path: mobile/build/web
+        retention-days: 7
+    
+    - name: Deploy to GitHub Pages (optional)
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: mobile/build/web
+        publish_branch: gh-pages
