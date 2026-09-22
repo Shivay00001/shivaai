@@ -13,10 +13,12 @@ __author__ = "ShivAI Team"
 from .agent import ShivAIAgent
 from .plugin_loader import PluginLoader, BasePlugin
 from .task_queue import TaskQueue
+from .config import Config
 
 __all__ = [
     "ShivAIAgent",
     "PluginLoader",
     "BasePlugin",
     "TaskQueue",
+    "Config",
 ]
