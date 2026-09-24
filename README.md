@@ -1,50 +1,24 @@
-# Shivaai
+# ShivAI
 
-An enterprise-grade solution engineered for high performance.
+**Desktop app** — offline voice/text AI assistant ("India's First Offline AGI Assistant"). CLI-based; no LLM dependency, no API keys.
 
-![Language](https://img.shields.io/badge/Language-Python-blue)
-![Status](https://img.shields.io/badge/Status-Active-success)
-![License](https://img.shields.io/badge/License-MIT-green)
+## Run
 
-## 🚀 Overview
+```bash
+python main_entry.py --text     # text-only mode (recommended headless; verified working)
+python main_entry.py            # interactive mode (voice in+out on a desktop with mic/speaker)
+python main_entry.py --debug    # debug logging
+```
 
-Welcome to the **Shivaai** repository. This project is built to deliver a robust and scalable solution tailored to modern development standards.
+Optional config: copy `config.example.yaml` to `config.yaml` and edit.
 
-## ✨ Features
+## Deps (pyproject.toml)
 
-- **High Performance:** Optimized for speed and efficiency.
-- **Scalable Architecture:** Designed to grow with your needs.
-- **Clean Codebase:** Follows best practices and industry standards.
-- **Secure by Default:** Engineered with security in mind.
+```bash
+pip install pyttsx3 SpeechRecognition vosk pyautogui keyboard pyperclip psutil opencv-python pillow
+```
 
-## 🛠️ Prerequisites
+## Notes
 
-Ensure you have the following installed in your environment before proceeding:
-- Appropriate runtime/compiler for `Python`
-- Standard development tools
-
-## 📦 Installation
-
-Follow standard installation steps for `Python` to set up the project locally:
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/Shivay00001/shivaai.git
-   ```
-2. Navigate to the project directory:
-   ```bash
-   cd shivaai
-   ```
-3. Install dependencies according to the standard `Python` ecosystem.
-
-## 💻 Usage
-
-Run the project using standard execution commands for `Python`. Ensure all environment variables and configurations are set prior to execution.
-
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome! Feel free to check the issues page.
-
-## 📝 License
-
-This project is licensed under standard terms.
+- Mic/speaker/TTS paths need real audio hardware (and eSpeak on Linux) — cannot be verified headless. Text-only mode boots and runs verified.
+- Windows-specific bits (winshell etc.) are only used on Windows.
