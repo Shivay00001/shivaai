@@ -1,5 +1,7 @@
 # ShivAI
 
+Built by [VisionQuantech](https://visionquantech.com) — AI agents, apps & tools for small businesses.
+
 **Desktop app** — offline voice/text AI assistant ("India's First Offline AGI Assistant"). CLI-based; no LLM dependency, no API keys.
 
 ## Run
